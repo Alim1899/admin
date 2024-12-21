@@ -1,0 +1,135 @@
+.preview {
+  margin: 3px;
+  column-gap: 1%;
+  height: 100%;
+  width: calc(100% - 4px);
+  border-top: 1px solid gold;
+}
+.prevHeader {
+  text-align: center;
+}
+
+.bin {
+  height: 50px;
+  display: block;
+  border: 1px solid;
+  margin-left: -55px;
+  margin-bottom: 10px;
+  border: none;
+}
+
+.bin:hover {
+  opacity: 0.5;
+}
+.none {
+  display: none;
+}
+
+.photos {
+  text-align: center;
+  border-radius: 15px;
+  margin-top: 5px;
+max-height: 100%;  
+overflow-y: auto;
+overflow-x: hidden;
+
+}
+
+
+.photo {
+  display: inline-flex;
+  cursor: pointer;
+  width: 15vw;
+  margin: 0.2vw;
+}
+
+.uploadedImages {
+  width: calc(100% - 4px);
+  font-size: clamp(1.1rem, 3vw, 2.4rem);
+  display: grid;
+  place-content: center;
+  margin: auto;
+}
+.uploadedImages>h6{
+  padding: 0;
+  margin: 10px;
+}
+
+
+.imagePrev {
+  height: 20vh;
+  width: 100%;
+  margin: 1px;
+}
+
+.saveButton,
+.disabledButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+  margin: auto;
+  margin-top: 5%;
+  background-color: var(--navbar-light);
+  font-size: clamp(1rem, 2vw, 2.5rem);
+  font-weight: 900;
+  border-radius: 15px;
+  border: none;
+  border-top: 1px solid gold;
+  color: aliceblue;
+}
+.disabledButton {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.saveButton:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.header{
+  margin-top: 5vh;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.photoInput {
+  font-size: clamp(1rem, 1.5vw, 1.7rem);
+  border-radius: 15px;
+  color: var(--dark-text);
+
+  overflow: hidden;
+}
+
+.imageLabel {
+  background-color: lightyellow;
+  font-size: clamp(1rem, 3vw, 2rem);
+}
+.imageUpload {
+  display: none;
+}
+.imageLabel:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+.imageLabel > img {
+  height: 35px;
+}
+
+.imageLabel {
+  display: grid;
+  width: 20vw;
+  max-width: 220px;
+  min-width: 100px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+.imageLabel > h6 {
+  color: rgb(42, 12, 97);
+}

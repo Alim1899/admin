@@ -1,0 +1,253 @@
+.main {
+width: 100%;
+  padding-bottom: 50px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--background-color);
+}
+
+.projectList{
+ max-width: 1980px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  width: 95%;
+  margin:20px auto;
+
+}
+
+/* SLIDES FOR PROJECT */
+.project {
+  border-radius: 45px;
+  background-color: var(--dark-text);
+  color: var(--light-text);
+  border: 1px solid gold;
+  display: grid;
+  width: 95%;
+  margin:10px auto;
+}
+
+.contentImg {
+  width: 100%;
+ height: 400px;
+  margin-top: 1vh;
+  border-radius: 15px;
+}
+.icon {
+  width: 50px;
+}
+
+.arrow {
+  cursor: pointer;
+  z-index: 1;
+}
+
+.slider {
+  position: relative;
+  display: grid;
+  grid-template-columns: 7% 86% 7%;
+  align-items: center; /* Center items vertically */
+}
+
+.slides {
+  display: flex;
+  overflow-x: hidden;
+}
+
+.slides img {
+  flex: 0 0 100%;
+}
+
+.projectHeader{
+
+  text-align: center;
+
+}
+.location{
+text-align: center;
+display: flex;
+justify-content: center;
+}
+.buttons{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-top:1px solid var(--navbar-light);
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+.deleteBtn{
+  width: 49%;
+  display: flex;
+ justify-content: center;
+ align-items: center;
+ border-bottom-right-radius: 50px;
+ border-left:1px solid var(--navbar-light);
+}
+.editBtn{
+  border-bottom-left-radius: 50px;
+  width: 49%;
+  border-right:1px solid gray;
+}
+.deleteBtn:hover,.editBtn:hover{
+  cursor: pointer;
+  opacity: 0.7;
+}
+.editBtn>a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toProject{
+  text-decoration: none; 
+  color: inherit; /* Inherit color from parent */
+  cursor: pointer; /* Ensure cursor behaves like a button */
+  display: inline-block; /* Ensure inline-block behavior */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+.deleteBtn>h3,.toProject>h3{
+  font-size: clamp(1rem,1.5vw,2rem);
+}
+
+
+
+.icona{
+  width: 50px;
+  margin: 0 20px;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width:1400px) {
+  .projectList{
+    grid-template-columns: repeat(2,1fr);
+  } 
+}
+@media screen and (max-width:750px) {
+  .projectList{
+    grid-template-columns: repeat(1,1fr);
+  } 
+  .project{
+    width: 80%;
+  }
+}
+@media screen and (max-width:550px) {
+ 
+  .project{
+    width: 95%;
+  }
+}
+
+
+
+
+
+
+
+/* STYLES FOR ANIMAITON */
+.animation {
+  height: 50vh;
+  width: 50vw;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  margin: auto;
+  margin-top: 10vh;
+  border-radius: 50px;
+  margin-bottom: 10vh;
+
+  border: 3px solid gold;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+/* HEADERS */
+
+.headers {
+  width: 95%;
+  height: 55px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: auto;
+  align-items: center;
+}
+
+.link {
+  font-size: clamp(0.4rem, 1vw, 1rem);
+  text-decoration: none;
+  color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightyellow;
+  color: rgb(26, 19, 19);
+  border-radius: 15px;
+  height: 70%;
+  padding:0 5px;
+  font-weight: 900;
+  z-index: 2;
+}
+.iconl {
+  height: clamp(20px,2vw,30px);
+}
+
+.header {
+  font-size: var(--header-font-size);
+  color: var(--background-color);
+  border-bottom: 2px solid lightyellow;
+  width: var(--header-width);
+  margin: auto;
+  text-align: center;
+  border-radius: 15px;
+  margin-bottom: 2vh;
+  color: aliceblue;
+}
+.headerDiv{
+  position: absolute;
+  width: 90%;
+  margin: auto;
+  margin-left: 5%;
+  top: 5px;
+  z-index: 1;
+}
+
+@media screen and (max-width:700px) {
+  
+.link{
+  padding: 3px 3px;
+}
+  .header{
+    margin-top: 15px;
+    font-size: clamp(0.7rem,2vw,1rem)
+  }
+  .iconl{
+    height: 20px;
+  }
+}

@@ -1,0 +1,31 @@
+.formControl {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  }
+  .error {
+    color: crimson;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+width: 200px;
+font-size: 0.8rem;
+  }
+  
+  .optGroup {
+    display: flex;
+    flex-direction: row;
+  }
+ 
+ .errorText{
+  background-color:aliceblue;
+  position: absolute;
+  width: 100%;
+ }
