@@ -1,7 +1,5 @@
-import { useParams,useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
-import Control from "../../Layout/Inputs/Control";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useReducer } from "react";
 import {
   getData,
   handleLocation,
@@ -10,47 +8,53 @@ import {
   deleteImage,
   deleteProjectImage,
   getImages,
-  deleteAllData
+  deleteAllData,
 } from "../Functions";
+import Input from "../Input";
 import classes from "./Edit.module.css";
+import point from "../../../assets/icons/marker.png";
 import Leaflet from "../../Map/Leaflet";
 import add from "../../../assets/AdminIcons/add_black.svg";
 import admin from "../../../assets/AdminIcons/list.svg";
-import upload from "../../../assets/AdminIcons/upload.svg";
 import office from "../../../assets/icons/office.png";
 import { years, months } from "../NewProject/DatePicker";
 import recycle from "../../../assets/icons/delete.png";
+import upload from "../../../assets/AdminIcons/upload.svg";
+import { initialState, reducer } from "./Reducer";
+
 const Edit = () => {
+  const position = [42.259061, 43.00614];
+  const marker = [42.259061, 42.66614];
   const [project, setProject] = useState([{}]);
-  const [btnDisabled,setBtnDisabled] =useState(false);
-  const [savedSucces,setSavedSucces] = useState(false);
-  const [dataArrived, setDataArrived] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState({ ge: "", en: "" });
-  const [position, setPosition] = useState([42.259061, 43.00614]);
-  const [marker, setMarker] = useState([42.259061, 42.66614]);
-  const [flyTo, setFlyTo] = useState(null);
-  const [icon, setIcon] = useState(office);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [savedSucces, setSavedSucces] = useState(false);
   const { id } = useParams();
-  const [oldImages, setOldImages] = useState([]);
-  const [newImages, setnewImages] = useState([]);
+
   let navigate = useNavigate();
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { dataArrived, projectDetails } = state;
+  const [newImages, setnewImages] = useState([]);
+  const [coords, setCoords] = useState("");
+  const {
+    geHeader,
+    enHeader,
+    selectedMonth,
+    geLocation,
+    enLocation,
+    flyTo,
+    enDescription,
+    geDescription,
+    allImages,
+  } = projectDetails;
+
   useEffect(() => {
     if (!dataArrived) {
-      getData(id, setProject, setDataArrived);
-      getImages(id,setOldImages)
+      getData(id, dispatch);
     } else {
+      setCoords(flyTo);
     }
-  }, [id,project,dataArrived,oldImages]);
-  useEffect(() => {
-    deleteAllData();
-  }, []);
-  const handleMonthChange = (value) => {
-    const month = months.find((m) => m.value === value);
-    if (month) {
-      setSelectedMonth({ ge: month.value, en: month.enValue });
-    }
-  };
-
+  }, [state, dataArrived, id, setCoords, flyTo]);
   const handleMouseOver = (e) => {
     const element = e.currentTarget.childNodes[1];
     element.classList.add(classes.bindiv);
@@ -62,6 +66,10 @@ const Edit = () => {
     element.classList.remove(classes.bindiv);
     element.classList.add(classes.none);
   };
+
+  useEffect(() => {
+    deleteAllData();
+  }, []);
   if (!dataArrived) {
     return (
       <div className={classes.animation}>
@@ -70,16 +78,6 @@ const Edit = () => {
       </div>
     );
   }
-  if(savedSucces){
-    return(
-    <div className={classes.succes}>
-    <h2>პროექტი შენახულია✅</h2>
-  </div>
-    )
-
-   
-  }
-
   return (
     <div className={classes.main}>
       <div className={classes.headers}>
@@ -93,221 +91,291 @@ const Edit = () => {
         </a>
       </div>
 
-      <div className={classes.content}>
-        <Formik
-          validateOnChange
-          initialValues={{
-            geHeader: project.header.ge || "",
-            enHeader: project.header.en || "",
-            coords: project.coords || "",
-            geDescription: project.description.ge || "",
-            enDescription: project.description.en || "",
-            geLocation: project.location.ge || "",
-            enLocation: project.location.en || "",
-            month: project.date.month.ge || "",
-            year: project.date.year || "",
-          }}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
-        >
-          {({ values,setFieldValue }) => {
-            console.log(project);
-            project.header = {ge:values.geHeader,en:values.enHeader}
-            project.description = {ge:values.geDescription,en:values.enDescription}
-            project.coords = values.coords;
-            project.date.month = {ge:selectedMonth.ge,en:selectedMonth.en};
-            project.date.year = values.year;
-            project.location = {ge:values.geLocation,en:values.enLocation}
-            project.images = {...oldImages,...newImages};
-
-            return (
-              <div className={classes.content}>
-                <Form className={classes.form}>
-                  <div className={classes.formWrapper}>
-                    <div className={classes.wrap}>
-                      <Control
-                        name="geHeader"
-                        label="სათაური ქარ."
-                        control="input"
-                        type="text"
-                      />
-                       <Control
-                        name="enHeader"
-                        label="სათაური EN."
-                        control="input"
-                        type="text"
-                      />
-                      <Control
-                        name="coords"
-                        label="კოორდინატები"
-                        control="input"
-                        onBlur={(e) =>
-                          handleLocation(
-                            e,
-                            values.coords,
-                            setPosition,
-                            setMarker,
-                            setFlyTo,
-                            setIcon
-                          )
-                        }
-                        type="text"
-                      ></Control>
-                      <Control
-                        name="geLocation"
-                        label="ლოკაცია ქარ."
-                        control="input"
-                        type="text"
-                      />
-                      <Control
-                        name="enLocation"
-                        label="ლოკაცია EN."
-                        control="input"
-                        type="text"
-                      />
-                      <div className={classes.datePicker}>
-                        <Control
-                          name="month"
-                          label="თვე"
-                          options={months}
-                          control="select"
-                          onChange={(e) => {
-                        setFieldValue("month", e.target.value);
-                        handleMonthChange(e.target.value);
+      {dataArrived && (
+        <div className={classes.content}>
+          <div className={classes.form}>
+            <div className={classes.formWrapper}>
+              <div className={classes.wrap}>
+              <div className={classes.name}>
+              <Input
+                  type="input"
+                  header="სახელი GE"
+                  label="geHeader"
+                  id="geHeader"
+                  value={geHeader}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "updateField",
+                      field: "geHeader",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+                <Input
+                  type="input"
+                  header="სახელი EN"
+                  label="enHeader"
+                  id="enHeader"
+                  value={enHeader}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "updateField",
+                      field: "enHeader",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+                <div className={classes.datePicker}>
+                  <label htmlFor="month" className={classes.label}>
+                    თვე
+                    <select
+                      name="month"
+                      value={selectedMonth.ge}
+                      onChange={(e) => {
+                        dispatch({
+                          type: "updateField",
+                          field: "selectedMonth",
+                          payload: {
+                            ge: e.target.value,
+                            en: e.target.options[e.target.selectedIndex].id,
+                          },
+                        });
                       }}
-                        />
-                        <Control
-                          name="year"
-                          label="წელი"
-                          options={years}
-                          control="select"
-                        />
-                      </div>
-                    </div>
-                    <div className={classes.description}>
-                      <Control
-                        name="geDescription"
-                        label="აღწერა ქარ."
-                        control="textarea"
-                        type="text"
-                      />
-                       <Control
-                        name="enDescription"
-                        label="აღწერა EN."
-                        control="textarea"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className={classes.map}>
-                    <Leaflet
-                      popup="ოფისი"
-                      center={position}
-                      zoom={7}
-                      icon={icon}
-                      marker={marker}
-                      location={flyTo}
-                    />
-                  </div>
+                    >
+                      {months.map((el) => {
+                        return (
+                          el.value && (
+                            <option
+                              key={el.key}
+                              id={el.enValue}
+                              disabled={!el.value}
+                            >
+                              {el.value}
+                            </option>
+                          )
+                        );
+                      })}
+                    </select>
+                  </label>
 
-                  <div className={classes.photoHeaders}>
-                    <h2 className={classes.photoHeader}>ახალი ფოტოები</h2>
-                    <h2 className={classes.photoHeader}>არსებული ფოტოები</h2>
-                  </div>
-                  <div className={classes.photos}>
-                    <div className={classes.newImages}>
-                      <div className={classes.uploadNew}>
-                        <Control
-                          name="image"
-                          control="file"
-                          label="ფოტოს ატვირთვა"
-                        />
-                        <label htmlFor="image" className={classes.imageLabel}>
-                          <img
-                            src={upload}
-                            alt="newImage"
-                            className={classes.icon}
-                          ></img>{" "}
-                          ატვირთვა
-                        </label>
-                        <input
-                          id="image"
-                          onChange={(e) =>
-                            imageUploadHandler(e,setnewImages)
-                          }
-                          className={classes.imageUpload}
-                          type="file"
-                          multiple
-                        ></input>
-                      </div>
-                      {Object.entries(newImages).length > 0 &&
-                      Object.entries(newImages).map((el) => (
-                        <div
-                          key={el[0]}
-                          className={classes.photo}
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          <img
-                            src={el[1].url}
-                            alt={el[0]}
-                            className={classes.imagePrev}
-                          />
-
-                          <img
-                            className={`${classes.none} ${classes.bin}`}
-                            src={recycle}
-                            alt={el[0]}
-                            onClick={(e)=>{deleteImage(e,el[0],setnewImages,newImages)}}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <div className={classes.oldImages}>
-                      {Object.entries(oldImages).length > 0 &&
-                        Object.entries(oldImages).map((el) => (
-                          <div
-                            key={el[0]}
-                            className={classes.photo}
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            <img
-                              src={el[1].url}
-                              alt={el[0]}
-                              key={el[1].key}
-                              className={classes.imagePrev}
-                            />
-
-                            <img
-                              className={`${classes.none} ${classes.bin}`}
-                              src={recycle}
-                              key={el[0]}
-                              alt={el[0]}
-                              onClick={(e)=>deleteProjectImage(e,id,el[0],setOldImages,oldImages)}
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </Form>
-
-                <button
-                  type="submit"
-                  onClick={(e) => edit(e, project, id,setSavedSucces,navigate,setBtnDisabled)}
-                  className={classes.submit}
-                  disabled={btnDisabled}
-                >
-                  შენახვა
-                </button>
+                  <label htmlFor="year" className={classes.label}>
+                    წელი
+                    <select
+                      name="year"
+                      onChange={(e) => {
+                        dispatch({
+                          type: "updateField",
+                          field: "year",
+                          payload: e.target.value,
+                        });
+                      }}
+                    >
+                      {years.map((el) => {
+                        return (
+                          el.value && <option key={el.key}>{el.value}</option>
+                        );
+                      })}
+                    </select>
+                  </label>
+                </div>
               </div>
-            );
-          }}
-        </Formik>
-      </div>
+<div className={classes.location}>
+   <Input
+                  type="input"
+                  header="კოორდინატები"
+                  label="flyTo"
+                  id="flyTo"
+                  value={coords}
+                  onBlur={(e) => {
+                    const value = e.target.value
+                      .replace(/[^0-9.,]/g, "")
+                      .split(",")
+                      .filter((coord) => coord);
+                    console.log(value.length === 2);
+                    if (value.length === 2)
+                      dispatch({ type: "updateCoords", payload: value });
+                    else dispatch({ type: "updateCoords", payload: "" });
+                  }}
+                  onChange={(e) => setCoords(e.target.value)}
+                />
+
+                <Input
+                  type="input"
+                  header="ლოკაცია GE"
+                  label="geLocation"
+                  id="geLocation"
+                  value={geLocation}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "updateField",
+                      field: "geLocation",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+                <Input
+                  type="input"
+                  header="ლოკაცია EN"
+                  label="enLocation"
+                  id="enLocation"
+                  value={enLocation}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "updateField",
+                      field: "enLocation",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+</div>
+              
+               
+                
+              </div>
+              <div className={classes.description}>
+                <Input
+                  type="textarea"
+                  header="აღწერა GE"
+                  label="geDescription"
+                  id="geDescription"
+                  value={geDescription}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "updateField",
+                      field: "geDescription",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+                <Input
+                  type="textarea"
+                  header="აღწერა EN"
+                  label="enDescription"
+                  id="enDescription"
+                  value={enDescription}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "updateField",
+                      field: "enDescription",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            <div className={classes.map}>
+              <Leaflet
+                center={position}
+                zoom={7}
+                marker={marker}
+                iconUrl={point}
+                popup="ოფისი"
+                office={office}
+                flyTo={flyTo}
+              />
+            </div>
+
+            <div className={classes.photos}>
+              <div className={classes.newImages}>
+              <h2 className={classes.photoHeader}>ახალი ფოტოები</h2>
+                <div className={classes.uploadNew}>
+                  <label htmlFor="image" className={classes.imageLabel}>
+                    <img
+                      src={upload}
+                      alt="newImage"
+                      className={classes.icon}
+                    ></img>{" "}
+                    ატვირთვა
+                  </label>
+                  <input
+                    id="image"
+                    onChange={(e) => imageUploadHandler(e, setnewImages)}
+                    className={classes.imageUpload}
+                    type="file"
+                    multiple
+                  ></input>
+                </div>
+                {newImages.length > 0 &&
+                  newImages.map((el) => (
+                    <div
+                      key={el[0]}
+                      className={classes.photo}
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      <img
+                        src={el[1].url}
+                        alt={el[0]}
+                        className={classes.imagePrev}
+                      />
+
+                      <img
+                        className={`${classes.none} ${classes.bin}`}
+                        src={recycle}
+                        alt={el[0]}
+                        onClick={(e) => {
+                          deleteImage(e, el[0], setnewImages, newImages);
+                        }}
+                      />
+                    </div>
+                  ))}
+              </div>
+              <div className={classes.oldImages}>
+              <h2 className={classes.photoHeader}>არსებული ფოტოები</h2>
+              <div className={classes.photoList}>
+                {allImages.length > 0 &&
+                  allImages.map((el) => (
+                    <div
+                      key={el[0]}
+                      className={classes.photo}
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      <img
+                        src={el[1].url}
+                        alt={el[0]}
+                        key={el[1].key}
+                        className={classes.imagePrev}
+                      />
+
+                      <img
+                        className={`${classes.none} ${classes.bin}`}
+                        src={recycle}
+                        key={el[0]}
+                        alt={el[0]}
+                        onClick={(e) => deleteProjectImage(e, id, el[0])}
+                      />
+                    </div>
+                  ))}
+              </div>
+                
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            onClick={(e) =>
+              edit(e, project, id, setSavedSucces, navigate, setBtnDisabled)
+            }
+            className={classes.submit}
+            disabled={btnDisabled}
+          >
+            შენახვა
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Edit;
+
+// if(savedSucces){
+//   return(
+//   <div className={classes.succes}>
+//   <h2>პროექტი შენახულია✅</h2>
+// </div>
+//   )
+
+// }

@@ -7,7 +7,6 @@ import edit from "../../../assets/AdminIcons/edit.png";
 import remove from "../../../assets/icons/delete.png";
 const Project = ({ project, id, deleteProject }) => {
   const [activeSlide, setActiveSlide] = useState(0);
-
   const leftSlide = (length) => {
     setActiveSlide((prevIndex) =>
       prevIndex === 0 ? length - 1 : prevIndex - 1
@@ -31,7 +30,7 @@ const Project = ({ project, id, deleteProject }) => {
             className={`${classes.arrow} ${classes.leftArrow}`}
           />
           <div className={classes.slides}>
-            {Object.entries(project.images).map((image, index) => (
+            {project.images.map((image, index) => (
               <img
                 key={index}
                

@@ -171,27 +171,49 @@ export const deleteImage = async (e, imageId, setKeys, keys) => {
 };
 export const deleteProject = async (id) => {
   const db = getDatabase(app);
-  const dbRef = ref(db, "projects/" + id);
-  const key = ref(db, "ids/" + id);
+  const dbRef = ref(db, `projects/${id}`);
+  const key = ref(db, `ids/${id}`);
+ 
   await remove(dbRef);
   await remove(key);
 };
-export const getData = async (id, setProject, setDataArrived) => {
+
+
+
+
+
+
+export const getData = async (id, dispatch) => {
   const db = getDatabase(app);
   const dbRef = ref(db, `projects/${id}`);
   try {
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {
       const projectData = snapshot.val();
-      setProject(projectData);
-      setDataArrived(true);
+      const transformedData = {
+        flyTo: projectData.coords.split(","), 
+        year: projectData.date.year,
+        selectedMonth: projectData.date.month,
+        geHeader: projectData.header.ge,
+        enHeader: projectData.header.en,
+        geLocation: projectData.location.ge,
+        enLocation: projectData.location.en,
+        geDescription: projectData.description.ge,
+        enDescription: projectData.description.en,
+        allImages: projectData.images,
+      };
+     dispatch({type:"dataArrived", payload:transformedData})
     } else {
-      console.error("Can't find project with the given ID");
+      dispatch({type:"error"})
     }
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
+
+
+
+
 
 export const deleteProjectImage = async (
   e,
@@ -287,6 +309,7 @@ export const saveProject = async (
   try {
     const db = getDatabase(app);
     const newDocRef = push(ref(db, "projects"));
+    const key = newDocRef.key;
     await set(newDocRef, {
       id: `project${new Date().getTime()}`,
       header: { ge: geHeader, en: enHeader },
@@ -296,7 +319,7 @@ export const saveProject = async (
       coords: coords.join(),
       location: { ge: geLocation, en: enLocation },
     });
-    await push(ref(db, "ids"), newDocRef.key);
+    await push(ref(db, `ids/${key}`), key);
     setSavedSuccess(true);
     dispatch({ type: "resetState" });
     setTimeout(() => {
