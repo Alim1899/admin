@@ -1,14 +1,15 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect, useReducer } from "react";
 import {
   getData,
-  handleLocation,
-  edit,
+  handleFieldChange,
+  saveEditedProject,
   imageUploadHandler,
   deleteImage,
-  deleteProjectImage,
-  getImages,
+  deleteProjectImageEdit,
   deleteAllData,
+  handleMouseOver,
+  handleMouseOut,
 } from "../Functions";
 import Input from "../Input";
 import classes from "./Edit.module.css";
@@ -25,17 +26,12 @@ import { initialState, reducer } from "./Reducer";
 const Edit = () => {
   const position = [42.259061, 43.00614];
   const marker = [42.259061, 42.66614];
-  const [project, setProject] = useState([{}]);
-  const [btnDisabled, setBtnDisabled] = useState(false);
-  const [savedSucces, setSavedSucces] = useState(false);
   const { id } = useParams();
-
-  let navigate = useNavigate();
-
   const [state, dispatch] = useReducer(reducer, initialState);
   const { dataArrived, projectDetails } = state;
   const [newImages, setnewImages] = useState([]);
   const [coords, setCoords] = useState("");
+  const [savedSucces,setSavedSucces] = useState(false)
   const {
     geHeader,
     enHeader,
@@ -46,8 +42,8 @@ const Edit = () => {
     enDescription,
     geDescription,
     allImages,
+    year,
   } = projectDetails;
-
   useEffect(() => {
     if (!dataArrived) {
       getData(id, dispatch);
@@ -55,17 +51,6 @@ const Edit = () => {
       setCoords(flyTo);
     }
   }, [state, dataArrived, id, setCoords, flyTo]);
-  const handleMouseOver = (e) => {
-    const element = e.currentTarget.childNodes[1];
-    element.classList.add(classes.bindiv);
-    element.classList.remove(classes.none);
-  };
-
-  const handleMouseOut = (e) => {
-    const element = e.currentTarget.childNodes[1];
-    element.classList.remove(classes.bindiv);
-    element.classList.add(classes.none);
-  };
 
   useEffect(() => {
     deleteAllData();
@@ -78,6 +63,7 @@ const Edit = () => {
       </div>
     );
   }
+
   return (
     <div className={classes.main}>
       <div className={classes.headers}>
@@ -96,141 +82,116 @@ const Edit = () => {
           <div className={classes.form}>
             <div className={classes.formWrapper}>
               <div className={classes.wrap}>
-              <div className={classes.name}>
-              <Input
-                  type="input"
-                  header="სახელი GE"
-                  label="geHeader"
-                  id="geHeader"
-                  value={geHeader}
-                  onChange={(e) => {
-                    dispatch({
-                      type: "updateField",
-                      field: "geHeader",
-                      payload: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  type="input"
-                  header="სახელი EN"
-                  label="enHeader"
-                  id="enHeader"
-                  value={enHeader}
-                  onChange={(e) => {
-                    dispatch({
-                      type: "updateField",
-                      field: "enHeader",
-                      payload: e.target.value,
-                    });
-                  }}
-                />
-                <div className={classes.datePicker}>
-                  <label htmlFor="month" className={classes.label}>
-                    თვე
-                    <select
-                      name="month"
-                      value={selectedMonth.ge}
-                      onChange={(e) => {
-                        dispatch({
-                          type: "updateField",
-                          field: "selectedMonth",
-                          payload: {
+                <div className={classes.name}>
+                  <Input
+                    type="input"
+                    header="სახელი GE"
+                    label="geHeader"
+                    id="geHeader"
+                    value={geHeader}
+                    onChange={(e) => {
+                      handleFieldChange(dispatch, "geHeader", e.target.value);
+                    }}
+                  />
+                  <Input
+                    type="input"
+                    header="სახელი EN"
+                    label="enHeader"
+                    id="enHeader"
+                    value={enHeader}
+                    onChange={(e) => {
+                      handleFieldChange(dispatch, "enHeader", e.target.value);
+                    }}
+                  />
+                  <div className={classes.datePicker}>
+                    <label htmlFor="month" className={classes.label}>
+                      თვე
+                      <select
+                        name="month"
+                        value={selectedMonth.ge}
+                        onChange={(e) => {
+                          handleFieldChange(dispatch, "selectedMonth", {
                             ge: e.target.value,
                             en: e.target.options[e.target.selectedIndex].id,
-                          },
-                        });
-                      }}
-                    >
-                      {months.map((el) => {
-                        return (
-                          el.value && (
-                            <option
-                              key={el.key}
-                              id={el.enValue}
-                              disabled={!el.value}
-                            >
-                              {el.value}
-                            </option>
-                          )
-                        );
-                      })}
-                    </select>
-                  </label>
+                          });
+                        }}
+                      >
+                        {months.map((el) => {
+                          return (
+                            el.value && (
+                              <option
+                                key={el.key}
+                                id={el.enValue}
+                                disabled={!el.value}
+                              >
+                                {el.value}
+                              </option>
+                            )
+                          );
+                        })}
+                      </select>
+                    </label>
 
-                  <label htmlFor="year" className={classes.label}>
-                    წელი
-                    <select
-                      name="year"
-                      onChange={(e) => {
-                        dispatch({
-                          type: "updateField",
-                          field: "year",
-                          payload: e.target.value,
-                        });
-                      }}
-                    >
-                      {years.map((el) => {
-                        return (
-                          el.value && <option key={el.key}>{el.value}</option>
-                        );
-                      })}
-                    </select>
-                  </label>
+                    <label htmlFor="year" className={classes.label}>
+                      წელი
+                      <select
+                        name="year"
+                        onChange={(e) => {
+                          handleFieldChange(dispatch, "year", e.target.value);
+                        }}
+                      >
+                        {years.map((el) => {
+                          return (
+                            el.value && <option key={el.key}>{el.value}</option>
+                          );
+                        })}
+                      </select>
+                    </label>
+                  </div>
                 </div>
-              </div>
-<div className={classes.location}>
-   <Input
-                  type="input"
-                  header="კოორდინატები"
-                  label="flyTo"
-                  id="flyTo"
-                  value={coords}
-                  onBlur={(e) => {
-                    const value = e.target.value
-                      .replace(/[^0-9.,]/g, "")
-                      .split(",")
-                      .filter((coord) => coord);
-                    console.log(value.length === 2);
-                    if (value.length === 2)
-                      dispatch({ type: "updateCoords", payload: value });
-                    else dispatch({ type: "updateCoords", payload: "" });
-                  }}
-                  onChange={(e) => setCoords(e.target.value)}
-                />
+                <div className={classes.location}>
+                  <Input
+                    type="input"
+                    header="კოორდინატები"
+                    label="flyTo"
+                    id="flyTo"
+                    value={coords}
+                    onBlur={(e) => {
+                      const value = e.target.value.trim();
+                      const pattern = /^(-?\d+(\.\d+)?),(-?\d+(\.\d+)?)$/;
+                      if (pattern.test(value)) {
+                        const coords = value
+                          .split(",")
+                          .map((coord) => coord.trim());
+                        dispatch({ type: "updateCoords", payload: coords });
+                      } else {
+                        dispatch({ type: "updateCoords", payload: "" });
+                      }
+                    }}
+                    onChange={(e) => setCoords(e.target.value)}
+                  />
 
-                <Input
-                  type="input"
-                  header="ლოკაცია GE"
-                  label="geLocation"
-                  id="geLocation"
-                  value={geLocation}
-                  onChange={(e) => {
-                    dispatch({
-                      type: "updateField",
-                      field: "geLocation",
-                      payload: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  type="input"
-                  header="ლოკაცია EN"
-                  label="enLocation"
-                  id="enLocation"
-                  value={enLocation}
-                  onChange={(e) => {
-                    dispatch({
-                      type: "updateField",
-                      field: "enLocation",
-                      payload: e.target.value,
-                    });
-                  }}
-                />
-</div>
-              
-               
-                
+                  <Input
+                    type="input"
+                    header="ლოკაცია GE"
+                    label="geLocation"
+                    id="geLocation"
+                    value={geLocation}
+                    onChange={(e) => {
+                      handleFieldChange(dispatch, "geLocation", e.target.value);
+                    }}
+                  />
+                  <Input
+                    type="input"
+                    header="ლოკაცია EN"
+                    label="enLocation"
+                    id="enLocation"
+                    value={enLocation}
+                    onChange={(e) => {
+                      handleFieldChange(dispatch, "enLocation", e.target.value);
+                    }}
+                  />
+                </div>
               </div>
               <div className={classes.description}>
                 <Input
@@ -240,11 +201,11 @@ const Edit = () => {
                   id="geDescription"
                   value={geDescription}
                   onChange={(e) => {
-                    dispatch({
-                      type: "updateField",
-                      field: "geDescription",
-                      payload: e.target.value,
-                    });
+                    handleFieldChange(
+                      dispatch,
+                      "geDescription",
+                      e.target.value
+                    );
                   }}
                 />
                 <Input
@@ -254,11 +215,11 @@ const Edit = () => {
                   id="enDescription"
                   value={enDescription}
                   onChange={(e) => {
-                    dispatch({
-                      type: "updateField",
-                      field: "enDescription",
-                      payload: e.target.value,
-                    });
+                    handleFieldChange(
+                      dispatch,
+                      "enDescription",
+                      e.target.value
+                    );
                   }}
                 />
               </div>
@@ -277,105 +238,124 @@ const Edit = () => {
 
             <div className={classes.photos}>
               <div className={classes.newImages}>
-              <h2 className={classes.photoHeader}>ახალი ფოტოები</h2>
+                <h2 className={classes.photoHeader}>ახალი ფოტოები</h2>
                 <div className={classes.uploadNew}>
-                  <label htmlFor="image" className={classes.imageLabel}>
-                    <img
-                      src={upload}
-                      alt="newImage"
-                      className={classes.icon}
-                    ></img>{" "}
-                    ატვირთვა
-                  </label>
-                  <input
-                    id="image"
-                    onChange={(e) => imageUploadHandler(e, setnewImages)}
-                    className={classes.imageUpload}
-                    type="file"
-                    multiple
-                  ></input>
-                </div>
-                {newImages.length > 0 &&
-                  newImages.map((el) => (
-                    <div
-                      key={el[0]}
-                      className={classes.photo}
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
+                  <div className={classes.uploadBtn}>
+                    <label htmlFor="image" className={classes.imageLabel}>
                       <img
-                        src={el[1].url}
-                        alt={el[0]}
-                        className={classes.imagePrev}
-                      />
-
-                      <img
-                        className={`${classes.none} ${classes.bin}`}
-                        src={recycle}
-                        alt={el[0]}
-                        onClick={(e) => {
-                          deleteImage(e, el[0], setnewImages, newImages);
-                        }}
-                      />
-                    </div>
-                  ))}
-              </div>
-              <div className={classes.oldImages}>
-              <h2 className={classes.photoHeader}>არსებული ფოტოები</h2>
-              <div className={classes.photoList}>
-                {allImages.length > 0 &&
-                  allImages.map((el) => (
-                    <div
-                      key={el[0]}
-                      className={classes.photo}
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      <img
-                        src={el[1].url}
-                        alt={el[0]}
-                        key={el[1].key}
-                        className={classes.imagePrev}
-                      />
-
-                      <img
-                        className={`${classes.none} ${classes.bin}`}
-                        src={recycle}
+                        src={upload}
+                        alt="newImage"
+                        className={classes.icon}
+                      ></img>{" "}
+                      ატვირთვა
+                    </label>
+                    <input
+                      id="image"
+                      onChange={(e) => imageUploadHandler(e, setnewImages)}
+                      className={classes.imageUpload}
+                      type="file"
+                      multiple
+                    ></input>
+                  </div>
+                  {newImages.length > 0 &&
+                    newImages.map((el) => (
+                      <div
                         key={el[0]}
-                        alt={el[0]}
-                        onClick={(e) => deleteProjectImage(e, id, el[0])}
-                      />
-                    </div>
-                  ))}
+                        className={classes.photo}
+                        onMouseOver={(e) => handleMouseOver(e, classes)}
+                        onMouseOut={(e) => handleMouseOut(e, classes)}
+                      >
+                        <img
+                          src={el[1].url}
+                          alt={el[0]}
+                          className={classes.imagePrev}
+                        />
+
+                        <img
+                          className={`${classes.none} ${classes.bin}`}
+                          src={recycle}
+                          alt={el[0]}
+                          onClick={(e) => {
+                            deleteImage(e, el[0], setnewImages);
+                          }}
+                        />
+                      </div>
+                    ))}
+                </div>
               </div>
-                
+
+              <div className={classes.oldImages}>
+                <h2 className={classes.photoHeader}>არსებული ფოტოები</h2>
+                <div className={classes.photoList}>
+                  {allImages.length > 0 &&
+                    allImages.map((el) => (
+                      <div
+                        key={el[0]}
+                        className={classes.photo}
+                        onMouseOver={(e) => handleMouseOver(e, classes)}
+                        onMouseOut={(e) => handleMouseOut(e, classes)}
+                      >
+                        <img
+                          src={el[1].url}
+                          alt={el[0]}
+                          key={el[1].key}
+                          className={classes.imagePrev}
+                        />
+
+                        <img
+                          className={`${classes.none} ${classes.bin}`}
+                          src={recycle}
+                          key={el[0]}
+                          alt={el[0]}
+                          onClick={(e) => deleteProjectImageEdit(e, id, el[0],allImages,dispatch)}
+                        />
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>
 
           <button
             type="submit"
-            onClick={(e) =>
-              edit(e, project, id, setSavedSucces, navigate, setBtnDisabled)
-            }
+            onClick={(e) => {
+              saveEditedProject(
+                e,
+                id,
+                geHeader,
+                enHeader,
+                selectedMonth,
+                year,
+                coords,
+                geLocation,
+                enLocation,
+                geDescription,
+                enDescription,
+                allImages,
+                newImages,
+                setSavedSucces
+              );
+            }}
             className={classes.submit}
-            disabled={btnDisabled}
           >
             შენახვა
           </button>
         </div>
       )}
+      {
+        savedSucces&&
+
+  <div className={classes.succes}>
+  <h2>პროექტი შენახულია✅</h2>
+</div>
+  
+
+}
+    
     </div>
   );
 };
 
 export default Edit;
 
-// if(savedSucces){
-//   return(
-//   <div className={classes.succes}>
-//   <h2>პროექტი შენახულია✅</h2>
-// </div>
-//   )
 
-// }

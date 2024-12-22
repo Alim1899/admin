@@ -135,7 +135,6 @@ border-radius: 15px;
 
 .photos {
   border-top: 1px solid yellow;
-
   margin-top: 10px;
   display: grid;
   grid-template-columns: 48% 48%;
@@ -148,12 +147,14 @@ border-radius: 15px;
   grid-template-rows: 10% 90%;
 }
 
+
 .photo{
   margin: 0 5px;
 }
 
 .bin:hover {
   opacity: 0.5;
+  
   cursor: pointer;
 }
 .none{
@@ -164,30 +165,31 @@ border-radius: 15px;
   display: none;
 }
 
-.uploadNew,.imagePrev {
-width: clamp(50px,12vw,250px);
-height: clamp(50px,12vw,250px);
+.uploadBtn,.imagePrev {
+width: clamp(50px,14vw,270px);
+height: clamp(50px,14vw,270px);
  border-radius: 15px;
  object-fit:fill;
 }
-.imageLabel,.uploadNew{
+.imageLabel,.uploadBtn{
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-size: clamp(0.7rem,1.5vw,2rem);
+  font-size: clamp(0.5rem,1.5vw,2rem);
   font-weight: 900;
-}
-.photoList{
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 25px;
-}
-.uploadNew{
-  margin-top: 25px;
   background-color: lightyellow;
-  color: var(--background-color);
+  
+}
 
+.uploadNew,.photoList{
+  color: var(--background-color);
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  max-height: 40vh;
+  overflow-y: auto;
+  justify-items: center;
+  margin-top: 25px;
 }
 .imageLabel:hover {
   cursor: pointer;
@@ -200,7 +202,7 @@ height: clamp(50px,12vw,250px);
 
 .photoHeader{
   font-size: clamp(1rem,2vw,2rem);
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   height:clamp(1rem,2vw,3rem);
 }
@@ -218,7 +220,7 @@ height: clamp(50px,12vw,250px);
 }
 /* ANIMATION */
 .animation {
- height: 100%;
+ height: 100vh;
  width: 100%;
   background-color: var(--background-color);
   display: flex;
@@ -307,24 +309,39 @@ height: clamp(50px,12vw,250px);
   .formWrapper{
     grid-template-columns: 100%;
   }
-  .uploadNew,.imagePrev {
-    width: 60px;
-    height: 60px;
-     border-radius: 15px;
-     object-fit:fill;
-    }
-    .photos{
-      grid-template-columns: 100%;
-    }
-    .newImages,.oldImages{
-margin: auto;   
-justify-content: center;
-    }
+ 
+    
+ 
     .photoHeader{
       border: none;
       text-align: center;
+      font-size: clamp(0.8rem,2vw,1rem);
     }
     .map{
       height: 30vh;
     }
+    .uploadBtn,.imagePrev {
+      width: clamp(50px,13vw,270px);
+      height: clamp(50px,13vw,270px);
+       border-radius: 15px;
+       object-fit:fill;
+      }
+}
+@media screen and (max-width:500px) {
+  .uploadNew,.photoList{
+ 
+    grid-template-columns: repeat(2,1fr);
+    
+  }
+  .uploadBtn,.imagePrev {
+    width: clamp(20px,20vw,270px);
+    height: clamp(20px,20vw,270px);
+     border-radius: 15px;
+     object-fit:fill;
+    }
+}
+
+.submit:hover{
+  cursor: pointer;
+  opacity: 0.7;
 }
