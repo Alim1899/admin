@@ -22,47 +22,37 @@ const ProjectPreview = ({ allImages, dispatch }) => {
   };
   return (
     <div className={classes.preview}>
-      <div className={classes.photos}>
-        {allImages.length === 0 && (
-          <div className={classes.uploadedImages}>
-            <h6>ფოტოების ატვირთვა აუცილებელია</h6>
-          </div>
-        )}
-        <div className={classes.header}>
-          <div className={classes.photoInput}>
-            <label htmlFor="image" className={classes.imageLabel}>
-              <img src={upload} alt="upload"></img>
-              <h6>ატვირთვა</h6>
-              <input
-                id="image"
-                onChange={(e) => {
-                  projectImageUploader(e, dispatch);
-                }}
-                className={classes.imageUpload}
-                type="file"
-                multiple
-              />{" "}
-            </label>
-          </div>
-        </div>
+      <h6 className={classes.header}>ფოტოების ატვირთვა აუცილებელია</h6>
 
+      <div className={classes.uploadNew}>
+        <div className={classes.uploadBtn}>
+          <label htmlFor="image" className={classes.imageLabel}>
+            <img src={upload} alt="newImage" className={classes.icon}></img>{" "}
+            ატვირთვა
+          </label>
+          <input
+            id="image"
+            onChange={(e) => projectImageUploader(e, dispatch)}
+            className={classes.imageUpload}
+            type="file"
+            multiple
+          ></input>
+        </div>
         {allImages.length > 0 &&
           allImages.map((el) => (
             <div
               key={el[0]}
-              id={el[0]}
               className={classes.photo}
-              onMouseOver={handleMouseOver}
-              onMouseOut={handleMouseOut}
+              onMouseOver={(e) => handleMouseOver(e, classes)}
+              onMouseOut={(e) => handleMouseOut(e, classes)}
             >
               <img src={el[1].url} alt={el[0]} className={classes.imagePrev} />
 
               <img
                 className={`${classes.none} ${classes.bin}`}
-                onClick={(e) => removeProjectImage(e, allImages, dispatch)}
                 src={recycle}
-                alt="bin"
-                id={el[0]}
+                alt={el[0]}
+                onClick={(e) => removeProjectImage(e, allImages, dispatch)}
               />
             </div>
           ))}

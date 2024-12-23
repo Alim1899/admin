@@ -48,19 +48,14 @@ label{
   text-align: center;
   font-size: clamp(0.8rem,2vw,2rem);
 }
- input {
+ .input {
   height: 30px;
   min-width: 120px;
   border-radius: 15px;
   z-index: 9999;
 }
-textarea{
-  width: 90%;
-  margin: auto;
-  height: 70px;
-  border-radius: 15px;
-}
-select{
+
+.select{
   height: 30px;
   border-radius: 15px;
 }
@@ -95,12 +90,7 @@ select{
   display: grid;
   border-radius: 15px;
 }
-.description > div > textarea {
-  height: 90%;
-  width: 90%;
-  border-radius: 15px;
-  border: 1px solid gold;
-}
+
 .description > div > textarea:focus,
 .formWrapper > div > div > input:focus,
 .datePicker:focus {
@@ -218,6 +208,13 @@ height: clamp(50px,14vw,270px);
   margin-top: 20px;
   border: none;
 }
+.description>label>textarea {
+  height: clamp(40px,10vh,200px);
+  width: 90%;
+  border-radius: 15px;
+  margin: auto;
+}
+
 /* ANIMATION */
 .animation {
  height: 100vh;
@@ -295,11 +292,12 @@ height: clamp(50px,14vw,270px);
 }
 
 @media screen and (max-width:800px) {
-  input{
+  .input{
     min-width: unset;
     width: clamp(10px,25vw,230px);
+    
   }
-  select{
+  .select{
     min-width: unset;
     width:clamp(20px,20vw,120px);
   }

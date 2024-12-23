@@ -162,9 +162,8 @@ export const deleteImage = async (e, imageId, setNewImages) => {
   const db = getDatabase(app);
   const dbRef = ref(db, "images/" + imageId);
   await remove(dbRef);
-  await retrieveImage(setNewImages)
+  await retrieveImage(setNewImages);
 };
-
 
 export const deleteProject = async (id) => {
   const db = getDatabase(app);
@@ -210,14 +209,12 @@ export const deleteProjectImageEdit = async (
   allImages,
   dispatch
 ) => {
-  console.log(projectId,imageId,allImages);
-   allImages.filter(img=>img[0]!==imageId);
-  dispatch({type:'setImages',payload:allImages.filter(img=>img[0]!==imageId)})
-  // const dbRef = ref(db, `projects/${projectId}/images/${imageId}`);
-  // const newKeys = { ...allImages };
-  // delete newKeys[imageId];
-  // setAllImages(newKeys);
-  // await remove(dbRef);
+  console.log(projectId, imageId, allImages);
+  allImages.filter((img) => img[0] !== imageId);
+  dispatch({
+    type: "setImages",
+    payload: allImages.filter((img) => img[0] !== imageId),
+  });
 };
 
 export const getImages = async (projectId, setAllImages) => {
@@ -321,58 +318,57 @@ export const saveProject = async (
   }
 };
 
-export const handleMouseOver = (e,classes) => {
+export const handleMouseOver = (e, classes) => {
   const element = e.currentTarget.childNodes[1];
   element.classList.add(classes.bindiv);
   element.classList.remove(classes.none);
 };
 
-export const handleMouseOut = (e,classes) => {
+export const handleMouseOut = (e, classes) => {
   const element = e.currentTarget.childNodes[1];
   element.classList.remove(classes.bindiv);
   element.classList.add(classes.none);
 };
 
-  export const handleFieldChange = (dispatch,field, value) => {
-    dispatch({ type: "updateField", field, payload: value });
-  };
+export const handleFieldChange = (dispatch, field, value) => {
+  dispatch({ type: "updateField", field, payload: value });
+};
 
+export const saveEditedProject = async (
+  e,
+  id,
+  geHeader,
+  enHeader,
+  month,
+  year,
+  coords,
+  geLocation,
+  enLocation,
+  geDescription,
+  enDescription,
+  allImages,
+  newImages,
+  setSavedSuccess
+) => {
+  e.preventDefault();
 
-  export const saveEditedProject = async (
-    e,
-    id,
-    geHeader,
-    enHeader,
-    month,
-    year,
-    coords,
-    geLocation,
-    enLocation,
-    geDescription,
-    enDescription,
-    allImages,
-    newImages,
-    setSavedSuccess,
-  ) => {
-    e.preventDefault();
-
-    try {
-      const db = getDatabase(app);
-      const newDocRef = (ref(db, `projects/${id}`));
-      await update(newDocRef, {
-        header: { en: enHeader, ge: geHeader },
-         description: { ge: geDescription, en: enDescription },
-         date: { month: month, year: year },
-         images: allImages.concat(newImages),
-         coords: coords.join(","),
-         location: { ge: geLocation, en: enLocation },
-      });
-      setSavedSuccess(true);
-      setTimeout(() => {
-        setSavedSuccess(false);
-        window.location.href = "/projectList"
-      }, 2000);
-    } catch (error) {
-      console.error("Error saving data:", error);
-    }
-  };
+  try {
+    const db = getDatabase(app);
+    const newDocRef = ref(db, `projects/${id}`);
+    await update(newDocRef, {
+      header: { en: enHeader, ge: geHeader },
+      description: { ge: geDescription, en: enDescription },
+      date: { month: month, year: year },
+      images: allImages.concat(newImages),
+      coords: coords.join(","),
+      location: { ge: geLocation, en: enLocation },
+    });
+    setSavedSuccess(true);
+    setTimeout(() => {
+      setSavedSuccess(false);
+      window.location.href = "/projectList";
+    }, 2000);
+  } catch (error) {
+    console.error("Error saving data:", error);
+  }
+};

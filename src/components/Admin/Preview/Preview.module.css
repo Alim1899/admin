@@ -1,135 +1,72 @@
-.preview {
-  margin: 3px;
-  column-gap: 1%;
-  height: 100%;
-  width: calc(100% - 4px);
-  border-top: 1px solid gold;
-}
-.prevHeader {
-  text-align: center;
-}
 
 .bin {
   height: 50px;
-  display: block;
   border: 1px solid;
-  margin-left: -55px;
-  margin-bottom: 10px;
+  margin-left: -50px;
   border: none;
+}
+
+.preview{
+  display:grid;
+  grid-template-rows: 15% 85%;
+  border-bottom: 1px solid gold;
+}
+.header{
+  border: none;
+  border-top: 1px solid gold;
+  text-align: center;
+  font-size: clamp(0.8rem,2vw,1.6rem);
+  padding: 0;
+  margin: 0;
+  margin-top: 3%;
 }
 
 .bin:hover {
   opacity: 0.5;
+  
+  cursor: pointer;
 }
-.none {
+.none{
   display: none;
 }
 
-.photos {
-  text-align: center;
-  border-radius: 15px;
-  margin-top: 5px;
-max-height: 100%;  
-overflow-y: auto;
-overflow-x: hidden;
-
+.imageUpload{
+  display: none;
 }
 
-
-.photo {
-  display: inline-flex;
-  cursor: pointer;
-  width: 15vw;
-  margin: 0.2vw;
+.uploadBtn,.imagePrev {
+width: clamp(100px,15vw,220px);
+height: clamp(100px,15vw,220px);
+ border-radius: 15px;
+ object-fit:cover;
 }
-
-.uploadedImages {
-  width: calc(100% - 4px);
-  font-size: clamp(1.1rem, 3vw, 2.4rem);
-  display: grid;
-  place-content: center;
-  margin: auto;
-}
-.uploadedImages>h6{
-  padding: 0;
-  margin: 10px;
-}
-
-
-.imagePrev {
-  height: 20vh;
-  width: 100%;
-  margin: 1px;
-}
-
-.saveButton,
-.disabledButton {
+.imageLabel,.uploadBtn{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 90%;
-  margin: auto;
-  margin-top: 5%;
-  background-color: var(--navbar-light);
-  font-size: clamp(1rem, 2vw, 2.5rem);
+  justify-items: center;
+  flex-direction: column;
+  font-size: clamp(0.5rem,1.5vw,2rem);
   font-weight: 900;
-  border-radius: 15px;
-  border: none;
-  border-top: 1px solid gold;
-  color: aliceblue;
-}
-.disabledButton {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-.saveButton:hover {
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-.header{
-  margin-top: 5vh;
-  display: flex;
-  justify-content: center;
-}
-
-
-
-.photoInput {
-  font-size: clamp(1rem, 1.5vw, 1.7rem);
-  border-radius: 15px;
-  color: var(--dark-text);
-
-  overflow: hidden;
-}
-
-.imageLabel {
   background-color: lightyellow;
-  font-size: clamp(1rem, 3vw, 2rem);
+  
 }
-.imageUpload {
-  display: none;
+
+.uploadNew{
+  color: var(--background-color);
+  display:flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  justify-content: center;
+  margin-top: 25px;
+  gap: 5px;
 }
 .imageLabel:hover {
   cursor: pointer;
   opacity: 0.7;
 }
-.imageLabel > img {
-  height: 35px;
+.icon{
+  height: clamp(20px,3vw,70px)
 }
 
-.imageLabel {
-  display: grid;
-  width: 20vw;
-  max-width: 220px;
-  min-width: 100px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-}
-.imageLabel > h6 {
-  color: rgb(42, 12, 97);
-}
+

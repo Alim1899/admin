@@ -31,7 +31,7 @@ const Edit = () => {
   const { dataArrived, projectDetails } = state;
   const [newImages, setnewImages] = useState([]);
   const [coords, setCoords] = useState("");
-  const [savedSucces,setSavedSucces] = useState(false)
+  const [savedSucces, setSavedSucces] = useState(false);
   const {
     geHeader,
     enHeader,
@@ -84,6 +84,7 @@ const Edit = () => {
               <div className={classes.wrap}>
                 <div className={classes.name}>
                   <Input
+                    className={classes.input}
                     type="input"
                     header="სახელი GE"
                     label="geHeader"
@@ -94,6 +95,7 @@ const Edit = () => {
                     }}
                   />
                   <Input
+                    className={classes.input}
                     type="input"
                     header="სახელი EN"
                     label="enHeader"
@@ -107,6 +109,7 @@ const Edit = () => {
                     <label htmlFor="month" className={classes.label}>
                       თვე
                       <select
+                        className={classes.select}
                         name="month"
                         value={selectedMonth.ge}
                         onChange={(e) => {
@@ -136,6 +139,7 @@ const Edit = () => {
                       წელი
                       <select
                         name="year"
+                        className={classes.select}
                         onChange={(e) => {
                           handleFieldChange(dispatch, "year", e.target.value);
                         }}
@@ -151,6 +155,7 @@ const Edit = () => {
                 </div>
                 <div className={classes.location}>
                   <Input
+                    className={classes.input}
                     type="input"
                     header="კოორდინატები"
                     label="flyTo"
@@ -172,6 +177,7 @@ const Edit = () => {
                   />
 
                   <Input
+                    className={classes.input}
                     type="input"
                     header="ლოკაცია GE"
                     label="geLocation"
@@ -182,6 +188,7 @@ const Edit = () => {
                     }}
                   />
                   <Input
+                    className={classes.input}
                     type="input"
                     header="ლოკაცია EN"
                     label="enLocation"
@@ -195,6 +202,7 @@ const Edit = () => {
               </div>
               <div className={classes.description}>
                 <Input
+                  className={classes.textarea}
                   type="textarea"
                   header="აღწერა GE"
                   label="geDescription"
@@ -209,6 +217,7 @@ const Edit = () => {
                   }}
                 />
                 <Input
+                  className={classes.textarea}
                   type="textarea"
                   header="აღწერა EN"
                   label="enDescription"
@@ -307,7 +316,15 @@ const Edit = () => {
                           src={recycle}
                           key={el[0]}
                           alt={el[0]}
-                          onClick={(e) => deleteProjectImageEdit(e, id, el[0],allImages,dispatch)}
+                          onClick={(e) =>
+                            deleteProjectImageEdit(
+                              e,
+                              id,
+                              el[0],
+                              allImages,
+                              dispatch
+                            )
+                          }
                         />
                       </div>
                     ))}
@@ -342,20 +359,13 @@ const Edit = () => {
           </button>
         </div>
       )}
-      {
-        savedSucces&&
-
-  <div className={classes.succes}>
-  <h2>პროექტი შენახულია✅</h2>
-</div>
-  
-
-}
-    
+      {savedSucces && (
+        <div className={classes.succes}>
+          <h2>პროექტი შენახულია✅</h2>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Edit;
-
-

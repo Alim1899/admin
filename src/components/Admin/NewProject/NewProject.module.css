@@ -38,7 +38,7 @@
   grid-template-columns: 60% 40%;
   place-content: center;
 }
-input {
+.inputs input {
   height: 30px;
   width: 15vw;
   min-width: 120px;
@@ -46,11 +46,11 @@ input {
   border-radius: 15px;
   border: 1px solid var(--navbar-light);
   z-index: 99;
-  
 }
 .projectHeaders{
   display: grid;
   place-content: center;
+  
 }
 .label{
 display: flex;
@@ -87,13 +87,17 @@ text-align: center;
 }
 
 
-  .description > label > textarea {
-    overflow-y: auto;
-    height: clamp(70px,13vh,200px);
-    border-radius: 15px;
-    width: 90%;
-    display: flex;
+.description{
+  display: flex;
+  justify-content: center;
+}
+  .description>label>textarea {
+  overflow-y: auto;
+   height: clamp(50px,10vh,200px);
+   width: 90%;
     margin: auto;
+    border-radius: 15px;
+    
     
 }
 .description>label:nth-child(1){
@@ -160,9 +164,7 @@ textarea:focus,
   align-items: center;
   height: 50px;
 }
-.imageLabel > h6 {
-  color: rgb(42, 12, 97);
-}
+
 
 .popup {
   background-color: var(--background-color);
@@ -262,19 +264,25 @@ z-index: 99999999;
   z-index: -1;
 }
 
-@media screen and (max-width:700px) {
-  .formWrapper{
-   display: flex;
-   flex-direction: column;
-  }
+@media screen and (max-width:800px) {
 .link{
-  padding: 3px 3px;
+  padding: 0px 10px;
 }
-  .header{
-    margin-top: 15px;
-    font-size: clamp(0.7rem,2vw,1rem)
-  }
+
+.formWrapper{
+  grid-template-columns: 100%;
+  overflow-y: auto;
+}
+.inputs{
+
+  border: 1px solid red;
+}
+.map{
+  height: 30vh;
+}
+ 
   .iconl{
     height: 20px;
   }
+ 
 }
