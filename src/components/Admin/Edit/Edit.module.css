@@ -48,7 +48,7 @@ label{
   text-align: center;
   font-size: clamp(0.8rem,2vw,2rem);
 }
- .input {
+ .name>label>input, .location>label>input {
   height: 30px;
   min-width: 120px;
   border-radius: 15px;
