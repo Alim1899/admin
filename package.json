@@ -1,7 +1,7 @@
 {
   "name": "admin",
   "version": "0.1.0",
-  "homepage": "http://admin.nueva.ge/",
+  "homepage": "http://admin.aa.com.ge/",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
