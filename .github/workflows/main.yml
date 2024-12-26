@@ -27,8 +27,9 @@ jobs:
       - name: Deploy to admin subdomain via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.2
         with:
-          server: ftp.aa.com.ge # FTP server
-          username: nueva@aa.com.ge # FTP username
-          password: Fornezi-1 # FTP password from GitHub secrets
+          server: ${{ secrets.CPANEL_FTP_SERVER }} 
+          username: ${{ secrets.CPANEL_FTP_USERNAME }} 
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }} 
+          protocol: ${{ secrets.CPANEL_FTP_PROTOCOL }} 
           local-dir: build/ # Folder with your built project
           server-dir: /public_html/ # Path to the admin subdomain folder
