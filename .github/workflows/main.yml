@@ -29,7 +29,7 @@ jobs:
         with:
           server: ftp.aa.com.ge  # FTP server
           username: nueva@aa.com.ge  # FTP username
-          password: ${{ secrets.CPANEL_FTP_PASSWORD }}  # FTP password from GitHub secrets
+          password: Fornezi-1  # FTP password from GitHub secrets
           local-dir: build/  # Folder with your built project
-          server-dir: /public_html/admin/  # Path to the admin subdomain folder
+          server-dir: /public_html/  # Path to the admin subdomain folder
           debug: true  # Enable detailed logs
