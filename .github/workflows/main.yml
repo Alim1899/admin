@@ -32,4 +32,4 @@ jobs:
           password: ${{ secrets.CPANEL_FTP_PASSWORD }} 
           protocol: ${{ secrets.CPANEL_FTP_PROTOCOL }} 
           local-dir: build/ # Folder with your built project
-          server-dir: /public_html/ # Path to the admin subdomain folder
+          server-dir: /public_html/admin/ # Path to the admin subdomain folder
