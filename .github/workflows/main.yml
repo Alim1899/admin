@@ -3,7 +3,7 @@ name: Deploy to Subdomain (admin.aa.com.ge)
 on:
   push:
     branches:
-      - main  # Trigger deployment on pushes to the 'main' branch
+      - main # Trigger deployment on pushes to the 'main' branch
 
 jobs:
   deploy:
@@ -16,20 +16,19 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20  # Your Node.js version
+          node-version: 20 # Your Node.js version
 
       - name: Install Dependencies
         run: npm install
 
       - name: Build Project
-        run: npm run build  # Adjust if your build command is different
+        run: npm run build # Adjust if your build command is different
 
       - name: Deploy to admin subdomain via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.2
         with:
-          server: ftp.aa.com.ge  # FTP server
-          username: nueva@aa.com.ge  # FTP username
-          password: Fornezi-1  # FTP password from GitHub secrets
-          local-dir: build/  # Folder with your built project
-          server-dir: /public_html/  # Path to the admin subdomain folder
-          debug: true  # Enable detailed logs
+          server: ftp.aa.com.ge # FTP server
+          username: nueva@aa.com.ge # FTP username
+          password: Fornezi-1 # FTP password from GitHub secrets
+          local-dir: build/ # Folder with your built project
+          server-dir: /public_html/ # Path to the admin subdomain folder
