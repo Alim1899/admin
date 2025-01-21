@@ -1,5 +1,5 @@
 import Layout from "./components/Layout/Layout";
-import './App.css'
+import "./App.css";
 const App = () => {
   return (
     <div className="main" style={{ padding: 0, margin: 0 }}>

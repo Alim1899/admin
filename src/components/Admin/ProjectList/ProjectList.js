@@ -1,28 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { retrieveData, deleteProject } from "../Functions";
+import { deleteProject } from "../Functions";
 import Project from "./Project";
 import add from "../../../assets/AdminIcons/add_black.svg";
 
 import classes from "./ProjectList.module.css";
+import { useProjects } from "../../Context/ProjectsContext";
 
 const ProjectList = () => {
-  const [projects, setProjects] = useState([]);
-
-  useEffect(() => {
-    retrieveData(setProjects);
-  }, []);
-
-  const memoizedProjects = useMemo(() => projects, [projects]);
-
-  const handleDeleteProject = (projectId) => {
-    const updatedProjects = memoizedProjects.filter(
-      ([id, _]) => id !== projectId
-    );
-    setProjects(updatedProjects);
-
-    deleteProject(projectId);
-  };
-
+  const { data, projectsLoaded, error, dispatch } = useProjects();
+  const projects = data.filter((value, index, self) => {
+    return index === self.findIndex((t) => t.id === value.id);
+  });
   return (
     <div className={classes.main}>
       <div className={classes.headers}>
@@ -35,20 +22,28 @@ const ProjectList = () => {
         </a>
       </div>
 
-      {memoizedProjects.length === 0 && (
+      {!projectsLoaded && (
         <div className={classes.animation}>
           <h2>იტვირთება პროექტები</h2>
           <div className={classes.loader}></div>
         </div>
       )}
-      {memoizedProjects.length > 0 && (
+      {error && (
+        <div className={classes.animation}>
+          <h2>პროექტები ვერ მოიძებნა🚫</h2>
+        </div>
+      )}
+
+      {projects.length > 0 && (
         <div className={classes.projectList}>
-          {memoizedProjects.map(([projectId, project], index) => (
+          {projects.map((project) => (
             <Project
-              key={projectId}
-              project={project}
-              id={projectId}
-              deleteProject={() => handleDeleteProject(projectId)}
+              key={project.id}
+              project={project.value}
+              id={project.id}
+              deleteProject={() =>
+                deleteProject(project.id, dispatch, projects)
+              }
             />
           ))}
         </div>

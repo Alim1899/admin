@@ -4,7 +4,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Newproject from "../Admin/NewProject/NewProject";
 import Admin from "../Admin/Admin/Admin";
 import ProjectList from "../Admin/ProjectList/ProjectList";
-import Edit from '../Admin/Edit/Edit'
+import Edit from "../Admin/Edit/Edit";
+import { ProjectsProvider } from "../Context/ProjectsContext";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -13,10 +14,14 @@ const router = createBrowserRouter([
   {
     path: "/newProject",
     element: <Newproject />,
-  }, 
+  },
   {
     path: "/projectList",
-    element: <ProjectList />,
+    element: (
+      <ProjectsProvider>
+        <ProjectList />
+      </ProjectsProvider>
+    ),
   },
   {
     path: "/edit/:id",
@@ -29,10 +34,10 @@ const router = createBrowserRouter([
   },
 ]);
 const Layout = () => {
-  return (      
-      <div className={classes.content}>
-        <RouterProvider router={router} />
-      </div>
+  return (
+    <div className={classes.content}>
+      <RouterProvider router={router} />
+    </div>
   );
 };
 

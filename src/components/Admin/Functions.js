@@ -9,6 +9,7 @@ import {
   push,
   remove,
   update,
+  child,
 } from "firebase/database";
 // TESTED WORKING
 export const save = async (
@@ -165,13 +166,39 @@ export const deleteImage = async (e, imageId, setNewImages) => {
   await retrieveImage(setNewImages);
 };
 
-export const deleteProject = async (id) => {
+export const deleteProject = async (id, dispatch, projects) => {
   const db = getDatabase(app);
-  const dbRef = ref(db, `projects/${id}`);
-  const key = ref(db, `ids/${id}`);
 
-  await remove(dbRef);
-  await remove(key);
+  // Reference to the 'id' path
+  const idRef = ref(db, `id`);
+
+  // Fetch all children under 'id'
+  const snapshot = await get(child(idRef, "/"));
+
+  if (snapshot.exists()) {
+    const data = snapshot.val(); // Get the data object
+    let keyToDelete = null;
+    const dbRef = ref(db, `projects/${id}`);
+    // Iterate over the data to find the key with the target value
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === id) {
+        keyToDelete = key;
+      }
+    });
+    if (keyToDelete) {
+      await remove(dbRef);
+      await remove(ref(db, `id/${keyToDelete}`));
+    } else {
+      console.log("No matching value found to delete");
+    }
+  } else {
+    console.log("No data found under 'id'");
+  }
+
+  dispatch({
+    type: "delete/project",
+    payload: projects.filter((el) => el.id !== id),
+  });
 };
 
 export const getData = async (id, dispatch) => {
@@ -306,7 +333,7 @@ export const saveProject = async (
       coords: coords.join(),
       location: { ge: geLocation, en: enLocation },
     });
-    await push(ref(db, `ids/${key}`), key);
+    await push(ref(db, `id/`), key);
     setSavedSuccess(true);
     dispatch({ type: "resetState" });
     setTimeout(() => {
@@ -370,5 +397,44 @@ export const saveEditedProject = async (
     }, 2000);
   } catch (error) {
     console.error("Error saving data:", error);
+  }
+};
+
+export const getContextIds = async (dispatch) => {
+  const db = getDatabase(app);
+  const dbRef = ref(db, `id`);
+
+  try {
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const uniqueIds = Object.entries(snapshot.val()).map((el) => el[1]);
+      dispatch({ type: "get/ids", payload: uniqueIds });
+    } else {
+      dispatch({ type: "null/projects" });
+      console.log("No data found at the specified database reference.");
+      dispatch({ type: "get/ids", payload: [] }); // Dispatch an empty array or handle accordingly
+    }
+  } catch (error) {
+    // Handle errors that occur during fetching
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const getProjects = async (id, dispatch) => {
+  const db = getDatabase();
+
+  try {
+    const projectsRef = ref(db, `projects/${id}`);
+    const snapshot = await get(projectsRef);
+    if (snapshot.exists()) {
+      dispatch({
+        type: "get/project",
+        payload: { id: id, value: snapshot.val() },
+      });
+    } else {
+      console.log("No data available for id:", id);
+    }
+  } catch (error) {
+    console.error("Error fetching data for id:", id, error);
   }
 };
