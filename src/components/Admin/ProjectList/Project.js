@@ -3,8 +3,8 @@ import { useState } from "react";
 import left from "../../../assets/icons/leftslide.svg";
 import right from "../../../assets/icons/rightslide.svg";
 import locate from "../../../assets/icons/location.svg";
-import edit from "../../../assets/AdminIcons/edit.png";
-import remove from "../../../assets/icons/delete.png";
+import edit from "../../../assets/AdminIcons/edit.svg";
+import remove from "../../../assets/AdminIcons/delete.svg";
 const Project = ({ project, id, deleteProject }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const leftSlide = (length) => {
@@ -18,11 +18,12 @@ const Project = ({ project, id, deleteProject }) => {
       prevIndex === length - 1 ? 0 : prevIndex + 1
     );
   };
+  console.log(Object.entries(project.images));
 
   return (
     <div className={classes.project}>
       <div className={classes.content}>
-        <div className={classes.slider}>
+         <div className={classes.slider}>
           <img
             alt="left"
             onClick={() => leftSlide(Object.entries(project.images).length)}
@@ -30,7 +31,7 @@ const Project = ({ project, id, deleteProject }) => {
             className={`${classes.arrow} ${classes.leftArrow}`}
           />
           <div className={classes.slides}>
-            {project.images.map((image, index) => (
+            {Object.entries(project.images).map((image, index) => (
               <img
                 key={index}
                
@@ -47,7 +48,7 @@ const Project = ({ project, id, deleteProject }) => {
             onClick={() => rightSlide(Object.entries(project.images).length)}
             className={`${classes.arrow} ${classes.rightArrow}`}
           />
-        </div>
+        </div> 
         <h2 className={classes.projectHeader}>{project.header.ge}</h2>
         <div className={classes.location}>
           <img alt="icon" className={classes.icon} src={locate} />

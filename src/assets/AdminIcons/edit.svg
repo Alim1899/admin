@@ -1,2 +1,24 @@
-<?xml version="1.0" ?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 2050 2050" data-name="Layer 3" id="Layer_3" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:#fff;}</style></defs><title/><path class="cls-1" d="M503.6,1165.9a45,45,0,0,1-44.8-48.9l14.4-164.6a44.9,44.9,0,0,1,13-27.9L947.8,462.9a45.1,45.1,0,0,1,63.6,0l150.2,150.3a44.9,44.9,0,0,1,0,63.6L700,1138.4a44.4,44.4,0,0,1-27.9,13l-164.5,14.3Zm164.6-59.4Z"/><path class="cls-1" d="M1560.8,1113.6H926.3a45,45,0,0,1,0-90h634.5a45,45,0,1,1,0,90Z"/><path class="cls-1" d="M1560.8,1338.4H503.6a45,45,0,1,1,0-90H1560.8a45,45,0,0,1,0,90Z"/><path class="cls-1" d="M1560.8,1563.2H503.6a45,45,0,0,1,0-90H1560.8a45,45,0,0,1,0,90Z"/></svg>
+<?xml version="1.0" ?>
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+<title/>
+
+<g id="Complete">
+
+<g id="edit">
+
+<g>
+
+<path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#E6E7E6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+
+<polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#E6E7E6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+
+</g>
+
+</g>
+
+</g>
+
+</svg>
